@@ -59,7 +59,7 @@ function SectionExamples() {
               <Button
                 className="btn-outline-neutral btn-round"
                 color="default"
-                href="/profile-pagem"
+                href="/profile-page"
                 target="_blank"
               >
                 Credit History

@@ -16,181 +16,108 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useState } from "react";
 
 // reactstrap components
 import {
   Button,
-  Label,
   FormGroup,
   Input,
-  NavItem,
-  NavLink,
-  Nav,
-  TabContent,
-  TabPane,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   Container,
   Row,
-  Col
+  Col,
+  Label
 } from "reactstrap";
 
 // core components
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
-import ProfilePageHeader from "components/Headers/ProfilePageHeader.js";
 import DemoFooter from "components/Footers/DemoFooter.js";
 
-function ProfilePage() {
-  const [activeTab, setActiveTab] = React.useState("1");
+function ProfilePage(props) {
 
-  const toggle = tab => {
-    if (activeTab !== tab) {
-      setActiveTab(tab);
-    }
-  };
+  const {
+    buttonLabel,
+    className
+  } = props;
 
-  document.documentElement.classList.remove("nav-open");
-  React.useEffect(() => {
-    document.body.classList.add("landing-page");
-    return function cleanup() {
-      document.body.classList.remove("landing-page");
-    };
-  });
+  const [modal, setModal] = useState(false);
+  const [phone, setPhone] = useState('');
+
+  const toggle = () => setModal(!modal);
+  
+  const searchResult = () => {
+    // Prevent button click from submitting form
+    // e.preventDefault();
+
+    const searchValue = document.getElementById("value");
+
+    setPhone(searchValue)
+  }
+
   return (
     <>
       <ExamplesNavbar />
-      <ProfilePageHeader />
-      <div className="section profile-content">
-        <Container>
-          <div className="owner">
-            <div className="avatar">
-              <img
-                alt="..."
-                className="img-circle img-no-padding img-responsive"
-                src={require("assets/img/faces/joe-gardner-2.jpg")}
-              />
-            </div>
-            <div className="name">
-              <h4 className="title">
-                Jane Faker <br />
-              </h4>
-              <h6 className="description">Music Producer</h6>
-            </div>
-          </div>
-          <Row>
-            <Col className="ml-auto mr-auto text-center" md="6">
-              <p>
-                An artist of considerable range, Jane Faker — the name taken by
-                Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs
-                and records all of his own music, giving it a warm, intimate
-                feel with a solid groove structure.
-              </p>
-              <br />
-              <Button className="btn-round" color="default" outline>
-                <i className="fa fa-cog" /> Settings
-              </Button>
-            </Col>
-          </Row>
-          <br />
-          <div className="nav-tabs-navigation">
-            <div className="nav-tabs-wrapper">
-              <Nav role="tablist" tabs>
-                <NavItem>
-                  <NavLink
-                    className={activeTab === "1" ? "active" : ""}
-                    onClick={() => {
-                      toggle("1");
-                    }}
-                  >
-                    Follows
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    className={activeTab === "2" ? "active" : ""}
-                    onClick={() => {
-                      toggle("2");
-                    }}
-                  >
-                    Following
-                  </NavLink>
-                </NavItem>
-              </Nav>
-            </div>
-          </div>
-          {/* Tab panes */}
-          <TabContent className="following" activeTab={activeTab}>
-            <TabPane tabId="1" id="follows">
-              <Row>
-                <Col className="ml-auto mr-auto" md="6">
-                  <ul className="list-unstyled follows">
-                    <li>
-                      <Row>
-                        <Col className="ml-auto mr-auto" lg="2" md="4" xs="4">
-                          <img
-                            alt="..."
-                            className="img-circle img-no-padding img-responsive"
-                            src={require("assets/img/faces/clem-onojeghuo-2.jpg")}
-                          />
-                        </Col>
-                        <Col className="ml-auto mr-auto" lg="7" md="4" xs="4">
-                          <h6>
-                            Flume <br />
-                            <small>Musical Producer</small>
-                          </h6>
-                        </Col>
-                        <Col className="ml-auto mr-auto" lg="3" md="4" xs="4">
-                          <FormGroup check>
-                            <Label check>
-                              <Input
-                                defaultChecked
-                                defaultValue=""
-                                type="checkbox"
-                              />
-                              <span className="form-check-sign" />
-                            </Label>
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </li>
-                    <hr />
-                    <li>
-                      <Row>
-                        <Col className="mx-auto" lg="2" md="4" xs="4">
-                          <img
-                            alt="..."
-                            className="img-circle img-no-padding img-responsive"
-                            src={require("assets/img/faces/ayo-ogunseinde-2.jpg")}
-                          />
-                        </Col>
-                        <Col lg="7" md="4" xs="4">
-                          <h6>
-                            Banks <br />
-                            <small>Singer</small>
-                          </h6>
-                        </Col>
-                        <Col lg="3" md="4" xs="4">
-                          <FormGroup check>
-                            <Label check>
-                              <Input defaultValue="" type="checkbox" />
-                              <span className="form-check-sign" />
-                            </Label>
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </li>
-                  </ul>
-                </Col>
-              </Row>
-            </TabPane>
-            <TabPane className="text-center" tabId="2" id="following">
-              <h3 className="text-muted">Not following anyone yet :(</h3>
-              <Button className="btn-round" color="warning">
-                Find artists
-              </Button>
-            </TabPane>
-          </TabContent>
-        </Container>
+      <div className="main">
+        <div className="section text-center">
+          <Container>
+            <Row>
+              <Col className="ml-auto mr-auto" md="8">
+                <h2 className="title">Finder</h2>
+                <h5 className="description">
+                  <strong>Enter a phone number</strong>
+                </h5>
+                <br />
+                <Row>
+                  <Col sm="2"></Col>
+                  <Col sm="4">
+                    <FormGroup>
+                      <Input id="value" placeholder="Default" type="text" />
+                    </FormGroup>
+                  </Col>
+                  <Col sm="4">
+                    <Button
+                      className="btn-round" color="default" outline
+                      href="#pablo"
+                      onClick={() => {
+                        toggle("1");
+                      }}
+                    >
+                      See Details
+                </Button>
+                  </Col>
+                  <Col sm="2"></Col>
+                </Row>
+              </Col>
+            </Row>
+            <br />
+            <br />
+
+          </Container>
+        </div>
+        <div className="section landing-section">
+        </div>
       </div>
+      <Modal isOpen={modal} toggle={toggle} className={className}>
+        <ModalHeader toggle={toggle}>Credit Status</ModalHeader>
+        <ModalBody>
+          <div class="md:flex bg-white rounded-lg p-6">
+            <div class="text-center md:text-left">
+              <h2 class="text-lg">Juma Mule</h2>
+              <div class="text-purple-500">Accountant</div>
+              <div class="text-gray-600"><Label className={`label label-danger`}>HIGH RISK</Label></div>
+              <div class="text-gray-600">256777642211</div>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={toggle}>Email</Button>{' '}
+          <Button color="secondary" onClick={toggle}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
       <DemoFooter />
     </>
   );

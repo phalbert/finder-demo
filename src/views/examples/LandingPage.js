@@ -16,7 +16,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, {useState} from "react";
 
 // reactstrap components
 import {
@@ -26,6 +26,10 @@ import {
   Row,
   Col,
   FormGroup,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Label
 } from "reactstrap";
 
@@ -35,7 +39,7 @@ import DemoFooter from "components/Footers/DemoFooter.js";
 import DataRow from "./DataRow"
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 
-function LandingPage() {
+function LandingPage(props) {
   document.documentElement.classList.remove("nav-open");
   React.useEffect(() => {
     document.body.classList.add("profile-page");
@@ -43,6 +47,20 @@ function LandingPage() {
       document.body.classList.remove("profile-page");
     };
   });
+
+  const {
+    buttonLabel,
+    className
+  } = props;
+
+  const [modal, setModal] = useState(false);
+  const [phone, setPhone] = useState('');
+
+  const toggle = () => setModal(!modal);
+  
+
+  const [value, setValue] = React.useState('');
+
   const people = [
     {
       id: 1,
@@ -86,6 +104,15 @@ function LandingPage() {
     }
   ]
 
+  const search = () => {
+    // Prevent button click from submitting form
+    // e.preventDefault();
+
+    const searchValue = document.getElementById("value");
+
+    return people.filter(person => person.name.toLowerCase().includes(searchValue))
+  }
+
   return (
     <>
       <ExamplesNavbar />
@@ -97,22 +124,23 @@ function LandingPage() {
               <Col className="ml-auto mr-auto" md="8">
                 <h2 className="title">Finder</h2>
                 <h5 className="description">
-                  <strong>Enter a NIN or phone number</strong>
+                  <strong>Enter a phone number</strong>
                 </h5>
                 <br />
                 <Row>
                   <Col sm="2"></Col>
                   <Col sm="4">
                     <FormGroup>
-                      <Input placeholder="Default" type="text" />
+                      <Input id="value" placeholder="Default" type="text" />
                     </FormGroup>
                   </Col>
                   <Col sm="4">
                     <Button
-                      className="btn-round"
-                      color="info"
+                      className="btn-round" color="default" outline
                       href="#pablo"
-                      onClick={e => e.preventDefault()}
+                      onClick={() => {
+                        toggle("1");
+                      }}
                     >
                       See Details
                 </Button>
@@ -123,31 +151,29 @@ function LandingPage() {
             </Row>
             <br />
             <br />
-            <Row>
-              <Col md="3">
-                <h6 className="info-title">NIN/Number</h6>
-              </Col>
-              <Col md="3">
-                <h6 className="info-title">Name</h6>
-              </Col>
-              <Col md="3">
-                <h6 className="info-title">Address</h6>
-              </Col>
-              <Col md="3">
-                <h6 className="info-title">Criminal Status</h6>
-              </Col>
-            </Row>
-            <br />
-            {
-                people.map((item) => (
-                        <DataRow key={item.id} item={item} />
-                    ))
-            }
+
           </Container>
         </div>
         <div className="section landing-section">
-       </div>
+        </div>
       </div>
+      <Modal isOpen={modal} toggle={toggle} className={className}>
+        <ModalHeader toggle={toggle}>Result</ModalHeader>
+        <ModalBody>
+          <div class="md:flex bg-white rounded-lg p-6">
+            <div class="text-center md:text-left">
+              <h2 class="text-lg">Erin Lindford</h2>
+              <div class="text-purple-500">Customer Support</div>
+              <div class="text-gray-600"><Label className={`label label-success`}>CLEAR</Label></div>
+              <div class="text-gray-600">256777233311</div>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={toggle}>Email</Button>{' '}
+          <Button color="secondary" onClick={toggle}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
       <DemoFooter />
     </>
   );
